@@ -11,7 +11,7 @@ const { uploadFile, getFileStream } = require("./s3");
 
 const app = express();
 
-app.get("13.126.19.195:7000/images/:key", (req, res) => {
+app.get("13.232.39.133:8080/images/:key", (req, res) => {
     console.log(req.params);
     const key = req.params.key;
     const readStream = getFileStream(key);
@@ -20,7 +20,7 @@ app.get("13.126.19.195:7000/images/:key", (req, res) => {
 });
 
 app.post(
-    "13.126.19.195:7000/images",
+    "13.232.39.133:8080/images",
     upload.single("image"),
     async (req, res) => {
         const file = req.file;
