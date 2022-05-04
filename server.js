@@ -1,36 +1,40 @@
-const express = require('express')
+const express = require("express");
 
-const fs = require('fs')
-const util = require('util')
-const unlinkFile = util.promisify(fs.unlink)
+const fs = require("fs");
+const util = require("util");
+const unlinkFile = util.promisify(fs.unlink);
 
-const multer = require('multer')
-const upload = multer({ dest: 'uploads/' })
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
-const { uploadFile, getFileStream } = require('./s3')
+const { uploadFile, getFileStream } = require("./s3");
 
-const app = express()
+const app = express();
 
-app.get('/images/:key', (req, res) => {
-  console.log(req.params)
-  const key = req.params.key
-  const readStream = getFileStream(key)
+app.get("3.109.60.85:7000/images/:key", (req, res) => {
+    console.log(req.params);
+    const key = req.params.key;
+    const readStream = getFileStream(key);
 
-  readStream.pipe(res)
-})
+    readStream.pipe(res);
+});
 
-app.post('/images', upload.single('image'), async (req, res) => {
-    const file = req.file;
-    console.log(file);
+app.post(
+    "3.109.60.85:7000/images",
+    upload.single("image"),
+    async (req, res) => {
+        const file = req.file;
+        console.log(file);
 
-    // apply filter
-    // resize
+        // apply filter
+        // resize
 
-    const result = await uploadFile(file);
-    await unlinkFile(file.path);
-    console.log(result);
-    res.send({ imagePath: `/images/${result.Key}` });
-    // res.send("Working")
-};)
+        const result = await uploadFile(file);
+        await unlinkFile(file.path);
+        console.log(result);
+        res.send({ imagePath: `/images/${result.Key}` });
+        // res.send("Working")
+    }
+);
 
-app.listen(8080, () => console.log("listening on port 8080"))
+app.listen(8080, () => console.log("listening on port 8080"));
